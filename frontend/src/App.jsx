@@ -1,10 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import axios from "axios";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+  const [backendMessage, setBackendMessage] = useState("");
+
+  // Fetch data from backend
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/")
+      .then((response) => {
+        setBackendMessage(response.data.message);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <>
@@ -17,19 +31,18 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+      <h2>Backend Says: {backendMessage}</h2> {/* Display backend message */}
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <p>Edit <code>src/App.jsx</code> and save to test HMR</p>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
