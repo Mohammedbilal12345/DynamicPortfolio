@@ -1,0 +1,25 @@
+name: Auto-Sync Repository
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  auto-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+
+      - name: Auto Pull & Push
+        run: |
+          git pull origin main || true
+          git add .
+          git commit -m "Auto-sync latest changes" || true
+          git push origin main || true
